@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>How old is Minecraft today?</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="How old is Minecraft today? View the release dates of the first and all current Java Edition releases easily." />
+		<meta name="theme-color" content="#444444">
+
+		<style>
+			body {
+				font-family: sans-serif;
+				text-align: center;
+			}
+			h1 {
+				font-size: 40px;
+				margin: 14px;
+			}
+
+			p {
+				display: inline-block;
+				padding: 3px;
+				margin: 5px;
+			}
+			.soon {
+				background-color: aqua;
+			}
+			.snapshot {
+				background-color: yellow;
+			}
+			.full {
+				background-color: limegreen;
+			}
+		</style>
+
+		<script>
+			var json = []
+			var showfull = true
+			var showsnapshots = false
+
+			async function load() {
+				if (json.length == 0) {
+					const res = await fetch("https://gist.githubusercontent.com/DEVTomatoCake/445c6045ebbd363c3eba33135ef2ceec/raw/9b6318c39540d0a5f0943137324962dccf79b4ad/mc_versions.json")
+					if (!res.ok) return alert("Cannot reach bugtracker api")
+					json = (await res.json()).reverse()
+				}
+				const query = document.getElementById("search").value
+
+				document.getElementById("firstrelage").innerText = getAge("2009-05-17")
+
+				var text = "<br>"
+				json.forEach(version => {
+					if (version.name == "Future Update") {
+						text += "<p class='soon'>" +
+							version.name +
+							" will be released soon™️ 👀</p><br>"
+					} else {
+						let isSnap = version.name.toLowerCase().includes("pre-release") || version.name.toLowerCase().includes("release candidate") || /[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.name)
+						if (isSnap && !showsnapshots) return
+						if (!isSnap && !showfull) return
+						if (query.trim().length > 1) {
+							if (!version.name.toLowerCase().includes(query.toLowerCase())) return
+						}
+
+						text += "<p class='" +
+							(isSnap ? "snapshot" : "full") +
+							"'>" + version.name +
+							" was released on " +
+							version.releaseDate +
+							" (" + getAge(version.releaseDate) + " ago)</p><br>"
+					}
+				})
+				document.getElementById("versions").innerHTML = text
+			}
+			function getAge(date) {
+				var today = new Date()
+				var birthDate = new Date(date)
+				var years = today.getFullYear() - birthDate.getFullYear()
+				var m = today.getMonth() - birthDate.getMonth()
+				if (m < 0 || (m == 0 && today.getDate() < birthDate.getDate())) years--
+				var months = today.getMonth() - birthDate.getMonth()
+				if (months < 0 || (months == 0 && today.getDate() < birthDate.getDate())) months = 12 + months
+				if (months >= 12) {
+					months -= 12
+					years++
+				}
+				var days = today.getDate() - birthDate.getDate()
+				if (days < 0) days = 30 + days
+				return (years == 0 ? "" : years + " year" + (years == 1 ? "" : "s") + (months == 0 && days == 0 ? "" : (months == 0 ? " and " : ", "))) +
+					(months == 0 ? "" : months + " month" + (months == 1 ? "" : "s") + (days == 0 ? "" : " and ")) +
+					(days == 0 ? "" : days + " day" + (days == 1 ? "" : "s"))
+			}
+		</script>
+	</head>
+	<body onload="load()">
+		<h1>How old is Minecraft today?</h1>
+		<label for="showfull">Show full versions:</label>
+		<input type="checkbox" id="showfull" checked onchange="showfull=!showfull;load()">
+		<br>
+		<label for="showsnapshots">Show release candidates, pre-releases and snapshots:</label>
+		<input type="checkbox" id="showsnapshots" onchange="showsnapshots=!showsnapshots;load()">
+		<br>
+		<label for="search">Search versions:</label>
+		<input type="search" id="search" maxlength="50" spellcheck="false" oninput="load()">
+		<br>
+
+		<p>First Minecraft Java Edition release was on <b>2009-05-17</b>.<br>
+		That means Minecraft is <b id="firstrelage"></b> old today.</p>
+
+		<div id="versions"></div>
+	</body>
+</html>
