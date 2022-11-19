@@ -4,8 +4,11 @@
 		<meta charset="utf-8">
 		<title>How old is Minecraft today?</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="How old is Minecraft today? View the release dates of the first and all current Java Edition releases easily." />
-		<meta name="theme-color" content="#444444">
+		<meta name="description" content="How old is Minecraft today? View the release dates of all Java Edition releases and snapshots easily." />
+		<meta name="theme-color" content="#FFD000">
+
+		<link href="./icon.ico" rel="shortcut icon" type="image/x-icon" />
+		<link href="./icon.ico" rel="icon" type="image/x-icon" />
 
 		<style>
 			body {
@@ -17,13 +20,14 @@
 				margin: 14px;
 			}
 
+			label, p {
+				font-size: 18px;
+			}
 			p {
 				display: inline-block;
 				padding: 3px;
 				margin: 5px;
-			}
-			.soon {
-				background-color: aqua;
+				border-radius: 3px;
 			}
 			.snapshot {
 				background-color: yellow;
@@ -40,9 +44,9 @@
 
 			async function load() {
 				if (json.length == 0) {
-					const res = await fetch("https://gist.githubusercontent.com/DEVTomatoCake/445c6045ebbd363c3eba33135ef2ceec/raw/9b6318c39540d0a5f0943137324962dccf79b4ad/mc_versions.json")
-					if (!res.ok) return alert("Cannot reach bugtracker api")
-					json = (await res.json()).reverse()
+					const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json")
+					if (!res.ok) return alert("Cannot reach mojang versions api")
+					json = (await res.json()).versions
 				}
 				const query = document.getElementById("search").value
 
@@ -50,25 +54,17 @@
 
 				var text = "<br>"
 				json.forEach(version => {
-					if (version.name == "Future Update") {
-						text += "<p class='soon'>" +
-							version.name +
-							" will be released soon™️ 👀</p><br>"
-					} else {
-						let isSnap = version.name.toLowerCase().includes("pre-release") || version.name.toLowerCase().includes("release candidate") || /[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.name)
-						if (isSnap && !showsnapshots) return
-						if (!isSnap && !showfull) return
-						if (query.trim().length > 1) {
-							if (!version.name.toLowerCase().includes(query.toLowerCase())) return
-						}
+					let isSnap = version.id.toLowerCase().includes("-pre") || version.id.toLowerCase().includes("pre-release") || version.id.toLowerCase().includes("-rc") || /[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.id)
+					if (isSnap && !showsnapshots) return
+					if (!isSnap && !showfull) return
+					if (query.trim().length > 1 && !version.id.toLowerCase().includes(query.toLowerCase())) return
 
-						text += "<p class='" +
-							(isSnap ? "snapshot" : "full") +
-							"'>" + version.name +
-							" was released on " +
-							version.releaseDate +
-							" (" + getAge(version.releaseDate) + " ago)</p><br>"
-					}
+					text += "<p class='" +
+						(isSnap ? "snapshot" : "full") +
+						"'>" + version.id +
+						" was released on " +
+						new Date(version.releaseTime).toLocaleString() +
+						" (" + getAge(version.releaseTime) + " ago)</p><br>"
 				})
 				document.getElementById("versions").innerHTML = text
 			}
