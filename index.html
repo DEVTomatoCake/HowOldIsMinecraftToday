@@ -67,7 +67,7 @@
 
 				document.getElementById("firstrelage").innerText = getAge("2009-05-17")
 
-				var text = "<br>"
+				let text = "<br>"
 				json.forEach(version => {
 					let isSnap = version.id.toLowerCase().includes("-pre") || version.id.toLowerCase().includes("pre-release") || version.id.toLowerCase().includes("-rc") || /[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.id)
 					if (isSnap && !showsnapshots) return
@@ -84,19 +84,22 @@
 				document.getElementById("versions").innerHTML = text
 			}
 			function getAge(date) {
-				var today = new Date()
-				var birthDate = new Date(date)
-				var years = today.getFullYear() - birthDate.getFullYear()
-				var m = today.getMonth() - birthDate.getMonth()
+				const today = new Date()
+				const birthDate = new Date(date)
+				let years = today.getFullYear() - birthDate.getFullYear()
+				const m = today.getMonth() - birthDate.getMonth()
 				if (m < 0 || (m == 0 && today.getDate() < birthDate.getDate())) years--
-				var months = today.getMonth() - birthDate.getMonth()
-				if (months < 0 || (months == 0 && today.getDate() < birthDate.getDate())) months = 12 + months
+				let months = today.getMonth() - birthDate.getMonth()
+				let days = today.getDate() - birthDate.getDate()
+				if (months < 0 || (months == 0 && today.getDate() < birthDate.getDate())) months += 12
+				if (days < 0) {
+					days += 30
+					months--
+				}
 				if (months >= 12) {
 					months -= 12
 					years++
 				}
-				var days = today.getDate() - birthDate.getDate()
-				if (days < 0) days = 30 + days
 				return (years == 0 ? "" : years + " year" + (years == 1 ? "" : "s") + (months == 0 && days == 0 ? "" : (months == 0 ? " and " : ", "))) +
 					(months == 0 ? "" : months + " month" + (months == 1 ? "" : "s") + (days == 0 ? "" : " and ")) +
 					(days == 0 ? "" : days + " day" + (days == 1 ? "" : "s"))
