@@ -48,9 +48,9 @@ const discordEmbed = (url, ver) => {
 			"<meta property='og:title' content='Minecraft " + ver.id + "'>" +
 			"<meta property='og:description' content='The Minecraft " + ver.type + " " + ver.id + " was published on " + date.getFullYear() + "-" +
 			(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() + 1 < 10 ? "0" : "") + date.getDate() +
-			" at " + date.toLocaleTimeString("UTC", {timeStyle: "long", hourCycle: "h24"}) + ". That was " + ms(Date.now () - date.getTime()) + " ago!'>" +
+			" at " + date.toLocaleTimeString("UTC", {timeStyle: "long", hourCycle: "h24"}) + ". That was " + ms(Date.now() - date.getTime()) + " ago!'>" +
 			"<meta name='theme-color' content='#17C40E'>"
-		 :
+		:
 			"<meta property='og:title' content='Unknown version!'>" +
 			"<meta property='og:description' content='Find out when Minecraft versions were published and a bit more :D'>" +
 			"<meta name='theme-color' content='#FF0000'>"
