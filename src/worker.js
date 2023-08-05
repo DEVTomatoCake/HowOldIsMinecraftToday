@@ -42,17 +42,17 @@ const ms = input => {
 
 const discordEmbed = (url, ver) => {
 	const date = ver ? new Date(ver.releaseTime) : void 0
-	return "<meta property='og:type' name='og:type' content='utility' />" +
-		"<meta property='og:url' content='" + (new URL(url)).origin + "' />" +
+	return "<meta property='og:type' name='og:type' content='website'>" +
+		"<meta property='og:url' content='" + (new URL(url)).origin + "'>" +
 		(ver ?
-			"<meta property='og:title' content='Minecraft " + ver.id + "' />" +
+			"<meta property='og:title' content='Minecraft " + ver.id + "'>" +
 			"<meta property='og:description' content='The Minecraft " + ver.type + " " + ver.id + " was published on " + date.getFullYear() + "-" +
 			(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() + 1 < 10 ? "0" : "") + date.getDate() +
-			" at " + date.toLocaleTimeString("UTC", {timeStyle: "long", hourCycle: "h24"}) + ". That was " + ms(Date.now () - date.getTime()) + " ago!' />" +
+			" at " + date.toLocaleTimeString("UTC", {timeStyle: "long", hourCycle: "h24"}) + ". That was " + ms(Date.now () - date.getTime()) + " ago!'>" +
 			"<meta name='theme-color' content='#17C40E'>"
 		 :
-			"<meta property='og:title' content='Unknown version!' />" +
-			"<meta property='og:description' content='Find out when Minecraft versions were published and a bit more :D' />" +
+			"<meta property='og:title' content='Unknown version!'>" +
+			"<meta property='og:description' content='Find out when Minecraft versions were published and a bit more :D'>" +
 			"<meta name='theme-color' content='#FF0000'>"
 		)
 }

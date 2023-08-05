@@ -7,8 +7,8 @@
 		<meta name="description" content="How old is Minecraft today? View the release dates of all Java Edition releases and snapshots easily." />
 		<meta name="theme-color" content="#17c40e">
 
-		<link href="./favicon.ico" rel="shortcut icon" type="image/x-icon" />
-		<link href="./favicon.ico" rel="icon" type="image/x-icon" />
+		<link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
+		<link href="./favicon.ico" rel="icon" type="image/x-icon">
 
 		<style>
 			body {
@@ -53,9 +53,9 @@
 		</style>
 
 		<script>
-			var json = []
-			var showfull = true
-			var showsnapshots = false
+			let json = []
+			let showfull = true
+			let showsnapshots = false
 
 			async function load() {
 				if (json.length == 0) {
@@ -118,8 +118,10 @@
 		<input type="search" id="search" maxlength="50" spellcheck="false" oninput="load()">
 		<br>
 
-		<p>First Minecraft Java Edition release was on <b>2009-05-17</b>.<br>
-		That means Minecraft is <b id="firstrelage"></b> old today.</p>
+		<p>
+			First Minecraft Java Edition release was on <b>2009-05-17</b>.<br>
+			That means Minecraft is <b id="firstrelage"></b> old today.
+		</p>
 
 		<div id="versions"></div>
 	</body>
