@@ -1,0 +1,13 @@
+name = "howoldisminecrafttoday"
+main = "src/worker.js"
+compatibility_date = "2023-08-05"
+
+[placement]
+mode = "smart"
+
+[site]
+bucket = "./assets"
+
+[[kv_namespaces]]
+id = "07da5c187a9e4d18aa417816a2dedaf3"
+binding = "MC_VERSION_CACHE"

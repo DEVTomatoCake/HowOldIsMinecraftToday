@@ -1,0 +1,21 @@
+{
+  "name": "howoldisminecrafttoday",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler publish",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230419.0",
+    "@html-eslint/eslint-plugin": "^0.19.1",
+    "@html-eslint/parser": "^0.19.1",
+    "eslint": "^8.46.0",
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-unicorn": "^48.0.1",
+    "wrangler": "^3.0.0"
+  }
+}
