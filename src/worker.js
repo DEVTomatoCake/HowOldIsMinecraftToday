@@ -11,21 +11,20 @@ const msTimes = {
 	mo: 1000 * 60 * 60 * 24 * 30,
 	y: 1000 * 60 * 60 * 24 * 365
 }
+const msNames = {
+	s: "second[s]",
+	m: "minute[s]",
+	h: "hour[s]",
+	d: "day[s]",
+	w: "week[s]",
+	mo: "month[s]",
+	y: "year[s]"
+}
 const ms = input => {
 	if (input == 0) return "0"
 
 	const output = []
 	let rest = input
-
-	const msNames = {
-		s: "second[s]",
-		m: "minute[s]",
-		h: "hour[s]",
-		d: "day[s]",
-		w: "week[s]",
-		mo: "month[s]",
-		y: "year[s]"
-	}
 
 	for (let i = Object.keys(msTimes).length - 1; i >= 0; i--) {
 		const unit = Object.keys(msTimes)[i]
@@ -47,7 +46,7 @@ const discordEmbed = (url, ver) => {
 		(ver ?
 			"<meta property='og:title' content='Minecraft " + ver.id + "'>" +
 			"<meta property='og:description' content='The Minecraft " + ver.type + " " + ver.id + " was published on " + date.getFullYear() + "-" +
-			(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() + 1 < 10 ? "0" : "") + date.getDate() +
+			(date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate() +
 			" at " + date.toLocaleTimeString("UTC", {timeStyle: "long", hourCycle: "h24"}) + ". That was " + ms(Date.now() - date.getTime()) + " ago!'>" +
 			"<meta name='theme-color' content='#17C40E'>"
 		:
@@ -59,7 +58,7 @@ const discordEmbed = (url, ver) => {
 
 export default {
 	async fetch(request, env, ctx) {
-		let path = decodeURI((new URL(request.url)).pathname)
+		const path = decodeURI((new URL(request.url)).pathname)
 		if (path == "/" || path == "/favicon.ico") {
 			return await getAssetFromKV(
 				{
@@ -78,8 +77,12 @@ export default {
 		let json = {}
 		if (versions) json = JSON.parse(versions)
 		else {
-			const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json")
-			if (!res.ok) return new Response("Cannot reach mojang versions api")
+			const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", {
+				headers: {
+					Accept: "application/json"
+				}
+			})
+			if (!res.ok) return new Response("Cannot reach Mojang versions api")
 
 			json = (await res.json()).versions
 			await env.MC_VERSION_CACHE.put("versions", JSON.stringify(json), {
@@ -87,8 +90,7 @@ export default {
 			})
 		}
 
-		const ver = json.find(v => v.id == path.split("/")[1])
-		return new Response(discordEmbed(request.url, ver), {
+		return new Response(discordEmbed(request.url, json.find(v => v.id == path.split("/")[1])), {
 			headers: { "Content-Type": "text/html" }
 		})
 	}
