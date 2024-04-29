@@ -8,7 +8,7 @@
     "start": "wrangler dev"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.1"
+    "@cloudflare/kv-asset-handler": "^0.3.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240419.0",
