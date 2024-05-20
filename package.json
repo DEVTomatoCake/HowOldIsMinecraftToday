@@ -11,7 +11,7 @@
     "@cloudflare/kv-asset-handler": "^0.3.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240502.0",
+    "@cloudflare/workers-types": "^4.20240512.0",
     "@html-eslint/eslint-plugin": "^0.24.1",
     "@html-eslint/parser": "^0.24.1",
     "@stylistic/eslint-plugin-js": "^2.1.0",
