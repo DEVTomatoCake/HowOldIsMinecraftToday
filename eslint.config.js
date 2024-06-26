@@ -4,7 +4,7 @@ const unicorn = require("eslint-plugin-unicorn")
 const sonarjs = require("eslint-plugin-sonarjs")
 const stylistic = require("@stylistic/eslint-plugin-js")
 const htmlESLint = require("@html-eslint/eslint-plugin")
-//const html = require("eslint-plugin-html")
+const html = require("eslint-plugin-html")
 
 const linterOptions = {
 	reportUnusedDisableDirectives: "error"
@@ -20,6 +20,7 @@ const rules = {
 	"default-param-last": 2,
 	"dot-notation": 2,
 	"func-name-matching": 2,
+	"func-style": 2,
 	"no-array-constructor": 2,
 	"no-compare-neg-zero": 2,
 	"no-const-assign": 2,
@@ -29,6 +30,7 @@ const rules = {
 	"no-duplicate-case": 2,
 	"no-div-regex": 2,
 	"no-eq-null": 2,
+	"no-extra-boolean-cast": [2, {enforceForInnerExpressions: true}],
 	"no-extra-bind": 2,
 	"no-extend-native": 2,
 	"no-empty-pattern": 2,
@@ -52,6 +54,7 @@ const rules = {
 	"no-unreachable": 1,
 	"no-unreachable-loop": 2,
 	"no-unsafe-finally": 2,
+	"no-unused-vars": 2,
 	"no-useless-computed-key": 2,
 	"no-useless-rename": 2,
 	"no-useless-escape": 2,
@@ -94,6 +97,7 @@ const rules = {
 		skipRegExps: true
 	}],
 	"no-constant-condition": 2,
+	"no-unsafe-negation": 2,
 	"no-undefined": 2,
 	"no-lone-blocks": 2,
 	"object-shorthand": 2,
@@ -129,7 +133,7 @@ const rules = {
 	"@stylistic/js/no-trailing-spaces": 2,
 	"@stylistic/js/max-statements-per-line": 2,
 	"@stylistic/js/max-len": [2, {
-		code: 220
+		code: 200
 	}],
 	"@stylistic/js/quote-props": [2, "as-needed"],
 	"@stylistic/js/quotes": [2, "double", {
@@ -153,17 +157,27 @@ const rules = {
 	"unicorn/empty-brace-spaces": 2,
 	"unicorn/error-message": 2,
 	"unicorn/new-for-builtins": 2,
+	"unicorn/catch-error-name": [2, {
+		name: "e",
+		ignore: [
+			"err",
+			"error",
+			/^\w+Error$/
+		]
+	}],
+	"unicorn/consistent-empty-array-spread": 2,
 	"unicorn/consistent-destructuring": 2,
 	"unicorn/consistent-function-scoping": 2,
 	"unicorn/no-array-method-this-argument": 2,
 	"unicorn/no-lonely-if": 2,
+	"unicorn/no-invalid-fetch-options": 2,
 	"unicorn/no-instanceof-array": 2,
+	"unicorn/no-magic-array-flat-depth": 2,
 	"unicorn/no-nested-ternary": 2,
 	"unicorn/no-new-buffer": 2,
 	"unicorn/no-console-spaces": 2,
 	"unicorn/no-for-loop": 2,
 	"unicorn/no-useless-undefined": 2,
-	"unicorn/no-zero-fractions": 2,
 	"unicorn/no-unreadable-iife": 2,
 	"unicorn/no-unnecessary-await": 2,
 	"unicorn/no-unreadable-array-destructuring": 2,
@@ -173,6 +187,7 @@ const rules = {
 	"unicorn/no-useless-length-check": 2,
 	"unicorn/no-useless-spread": 2,
 	"unicorn/no-useless-promise-resolve-reject": 2,
+	"unicorn/no-zero-fractions": 2,
 	"unicorn/prefer-array-find": 2,
 	"unicorn/prefer-array-index-of": 2,
 	"unicorn/prefer-includes": 2,
@@ -186,14 +201,23 @@ const rules = {
 	"unicorn/prefer-regexp-test": 2,
 	"unicorn/prefer-set-has": 2,
 	"unicorn/prefer-set-size": 2,
+	"unicorn/prefer-keyboard-event-key": 2,
 	"unicorn/prefer-negative-index": 2,
 	"unicorn/prefer-node-protocol": 2,
+	"unicorn/prefer-number-properties": [1, {
+		checkInfinity: true
+	}],
 	"unicorn/prefer-prototype-methods": 2,
 	"unicorn/prefer-string-trim-start-end": 2,
 	"unicorn/prefer-string-starts-ends-with": 2,
+	"unicorn/prefer-structured-clone": 2,
+	"unicorn/throw-new-error": 2,
 	"unicorn/require-number-to-fixed-digits-argument": 2,
 	"unicorn/switch-case-braces": [2, "avoid"],
 	"unicorn/text-encoding-identifier-case": 2,
+	"unicorn/no-await-in-promise-methods": 2,
+	"unicorn/no-single-promise-in-promise-methods": 2,
+	"unicorn/no-negation-in-equality-check": 2,
 
 	"sonarjs/no-extra-arguments": 2,
 	"sonarjs/no-empty-collection": 2,
@@ -254,8 +278,8 @@ module.exports = [
 			unicorn,
 			sonarjs,
 			"@stylistic/js": stylistic,
-			"@html-eslint": htmlESLint//,
-			//html
+			"@html-eslint": htmlESLint,
+			html
 		},
 		settings: {
 			"html/html-extensions": [".html"]
@@ -266,6 +290,7 @@ module.exports = [
 			"@html-eslint/require-meta-charset": 2,
 			"@html-eslint/require-button-type": 2,
 			"@html-eslint/no-restricted-attrs": 2,
+			"@html-eslint/no-multiple-h1": 2,
 			"@html-eslint/require-meta-description": 2,
 			"@html-eslint/no-skip-heading-levels": 2,
 			"@html-eslint/require-frame-title": 2,
@@ -279,7 +304,7 @@ module.exports = [
 			"@html-eslint/no-trailing-spaces": 2,
 			"@html-eslint/indent": [2, "tab"],
 			"@html-eslint/no-duplicate-attrs": 2,
-			"@html-eslint/no-inline-styles": 1,
+			"@html-eslint/no-inline-styles": 2,
 			"@html-eslint/no-duplicate-id": 2,
 			"@html-eslint/no-script-style-type": 2,
 			"@html-eslint/require-li-container": 2,
