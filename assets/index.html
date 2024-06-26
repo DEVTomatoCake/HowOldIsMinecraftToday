@@ -54,36 +54,10 @@
 
 		<script>
 			let json = []
-			let showfull = true
-			let showsnapshots = false
+			const showfull = true
+			const showsnapshots = false
 
-			async function load() {
-				if (json.length == 0) {
-					const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json")
-					if (!res.ok) return alert("Cannot reach mojang versions api")
-					json = (await res.json()).versions
-				}
-				const query = document.getElementById("search").value
-
-				document.getElementById("firstrelage").innerText = getAge("2009-05-17")
-
-				let text = "<br>"
-				json.forEach(version => {
-					let isSnap = version.id.toLowerCase().includes("-pre") || version.id.toLowerCase().includes("pre-release") || version.id.toLowerCase().includes("-rc") || /[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.id)
-					if (isSnap && !showsnapshots) return
-					if (!isSnap && !showfull) return
-					if (query.trim().length > 1 && !version.id.toLowerCase().includes(query.toLowerCase())) return
-
-					text += "<p class='" +
-						(isSnap ? "snapshot" : "full") +
-						"'>" + version.id +
-						" was released on " +
-						new Date(version.releaseTime).toLocaleString() +
-						" (" + getAge(version.releaseTime) + " ago)</p><br>"
-				})
-				document.getElementById("versions").innerHTML = text
-			}
-			function getAge(date) {
+			const getAge = date => {
 				const today = new Date()
 				const birthDate = new Date(date)
 				let years = today.getFullYear() - birthDate.getFullYear()
@@ -104,9 +78,42 @@
 					(months == 0 ? "" : months + " month" + (months == 1 ? "" : "s") + (days == 0 ? "" : " and ")) +
 					(days == 0 ? "" : days + " day" + (days == 1 ? "" : "s"))
 			}
+
+			const load = async () => {
+				if (json.length == 0) {
+					const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json")
+					if (!res.ok) return alert("Cannot reach mojang versions api")
+					json = (await res.json()).versions
+				}
+				const query = document.getElementById("search").value
+
+				document.getElementById("firstrelage").innerText = getAge("2009-05-17")
+
+				let text = "<br>"
+				json.forEach(version => {
+					const isSnap =
+						version.id.toLowerCase().includes("-pre") ||
+						version.id.toLowerCase().includes("pre-release") ||
+						version.id.toLowerCase().includes("-rc") ||
+						/[\d]{1,2}w[\d]{1,2}[a-z]/.test(version.id)
+
+					if (isSnap && !showsnapshots) return
+					if (!isSnap && !showfull) return
+					if (query.trim().length > 1 && !version.id.toLowerCase().includes(query.toLowerCase())) return
+
+					text += "<p class='" +
+						(isSnap ? "snapshot" : "full") +
+						"'>" + version.id +
+						" was released on " +
+						new Date(version.releaseTime).toLocaleString() +
+						" (" + getAge(version.releaseTime) + " ago)</p><br>"
+				})
+				document.getElementById("versions").innerHTML = text
+			}
+			document.addEventListener("DOMContentLoaded", load)
 		</script>
 	</head>
-	<body onload="load()">
+	<body>
 		<h1>How old is Minecraft today?</h1>
 		<label for="showfull">Show full versions:</label>
 		<input type="checkbox" id="showfull" checked onchange="showfull=!showfull;load()">
